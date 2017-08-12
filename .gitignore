@@ -1,0 +1,4 @@
+/dist
+/.wepycache
+/node_modules
+npm-debug.log*
