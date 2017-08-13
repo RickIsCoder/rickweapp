@@ -2,9 +2,11 @@
 
 <template>
   <view class="body">
-    <view class="title">请选择你的花名</view>
-    <view class="main">
-      
+    <view wx:if="{{step === 1}}" class="step-one">
+      <view class="title">请选择你的花名</view>
+      <view class="main"></view>  
+    </view>
+    <view wx:if="{{step === 2}}" class="step-two">
     </view>
   </view>
 </template>
@@ -16,12 +18,43 @@
     config = {
       navigationBarTitleText: '前端任务'
     }
-    
+
     compontents = {
+
     }
 
     data = {
-
+      step: 1,
+      userList: [
+        {
+          name: '五柳'，
+          rank: '4'
+        },
+        {
+          name: '大鱼'，
+          rank: '4'
+        },
+        {
+          name: '驯鹿'，
+          rank: '3'
+        },
+        {
+          name: '夕颜'，
+          rank: '2'
+        },
+        {
+          name: '藏马'，
+          rank: '2'
+        },
+        {
+          name: '杜松'，
+          rank: '1'
+        },
+        {
+          name: '新雨'，
+          rank: '1'
+        },
+      ]
     }
   }
 </script>

@@ -8,7 +8,7 @@ module.exports = {
     browser: true
   },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-  extends: ['@hlj/eslint-config-base'],
+  extends: 'standard',
   // required to lint *.wpy files
   plugins: [
     'html'
