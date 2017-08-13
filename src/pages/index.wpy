@@ -120,7 +120,7 @@
     onLoad() {
       const user = wepy.getStorageSync('user')
       this.user = user || {}
-      if (this.user.name) {
+      if (user.name) {
         wepy.setNavigationBarTitle({
           title: '计分板'
         })
@@ -154,10 +154,7 @@
           })
           return
         }
-        if (this.jumpOne && this.jumpOne === user.name) {
-          this.jumpOne = false
-          return
-        }
+        this.jumpOne = false
         this.setUser(user)
       },
       backToOne() {
