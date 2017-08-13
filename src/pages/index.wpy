@@ -1,12 +1,110 @@
-<style lang="less" src="index.less"></style>
+<style lang="less" src="main.less"></style>
 
 <template>
   <view class="body">
-    <view wx:if="{{step === 1}}" class="step-one">
-      <view class="title">请选择你的花名</view>
-      <view class="main"></view>  
+    <view wx:if="{{step === 1}}" class="step-one step">
+      <view class="title">
+        <view class="main-title">MiSSiON</view>
+        <view class="subtitle">请选择你的花名</view>
+      </view>
+      <view class="content">
+        <repeat for="{{userList}}" class="user-list" item="item">
+          <button
+            class="user-item"
+            hover-class="hover"
+            @tap="chooseUser({{item}})"
+          >
+            {{item.name}}
+          </button>
+        </repeat>
+      </view>
     </view>
-    <view wx:if="{{step === 2}}" class="step-two">
+    <view wx:if="{{step === 2}}" class="step-two step">
+      <view class="main">
+        <view class="left">
+          <view class="name-wrap">{{user.name}}</view>
+          <view class="back-one" @tap="backToOne">返回</view>
+        </view>
+        <view class="right">
+          <scroll-view class="task-list" scroll-y>
+            <repeat for="{{taskList}}" item="item" index="index">
+              <view class="task-wrap" @tap="showTaskContent({{item}})">
+                <view class="task-title">TASK-{{index+1}}：{{item.title}}</view>
+                <view class="task-content">
+                  <view class="tc-item-wrap">
+                    <view class="tc-item">难度</view>
+                    <view class="tc-item">评级</view>
+                    <view class="tc-item">连击</view>
+                  </view>
+                  <view class="tc-item-wrap">
+                    <view class="tc-item">{{item.rank}}</view>
+                    <view class="tc-item">{{item.score}}</view>
+                    <view class="tc-item">{{item.combo}}</view>
+                  </view>
+                  <view class="tc-final">{{item.finalScore}}</view>
+                </view>
+              </view>
+            </repeat>
+          </scroll-view>  
+          <button class="add-task" hover-class="hover" @tap="addTask">+</button>
+        </view>  
+      </view>
+      <view wx:if="{{showPop == true}}" class="pop">
+        <view class="bg" @tap="closePop"></view>
+        <view wx:if="{{showContent !== false }}">
+          <view class="task-show-content">{{showContent}}</view>
+        </view>
+        <view wx:else class="pop-content">
+          <view class="pop-title">任务卡</view>
+          <input
+            class="task-title"
+            placeholder="任务名"
+            maxlength="{{10}}"
+            bindinput="bindTaskTitle"
+          />
+          <textarea
+            class="task-content"
+            placeholder="任务描述"
+            bindinput="bindTaskContent"
+          />
+          <view class="rank-wrap">
+            <view>难度:</view>
+            <view class="center">
+              <repeat for="{{4}}" item="item">
+                <view @tap="chooseRank({{item}})">
+                  <view wx:if="{{item <= rank-1}}" class="icon choosed">&#xe733;</view>
+                  <view wx:else class="icon">&#xe605;</view>
+                </view>
+              </repeat>
+            </view>
+          </view>
+          <view class="rank-wrap">
+            <view>评级:</view>
+            <view class="center">
+              <repeat for="{{5}}" item="item">
+                <view @tap="chooseScore({{item}})">
+                  <view wx:if="{{item <= score-1}}" class="icon choosed">&#xe62b;</view>
+                  <view wx:else class="icon">&#xe624;</view>
+                </view>
+              </repeat>
+            </view>
+          </view>
+          <view class="rank-wrap">
+            <view>连击:</view>
+            <view class="center">
+              <view @tap="toggleCombo">
+                <view wx:if="{{combo == 2}}" class="icon choosed">&#xe62b;</view>
+                <view wx:else class="icon">&#xe624;</view>
+              </view>
+            </view>
+          </view>
+          <view class="rank-wrap">
+            <view>得分:</view>
+            <view class="final-score">{{finalScore}}</view>
+          </view>
+          <button class="confirm-task" @tap="confirm" hover-class="hover">确认</button>
+        </view>
+      </view>
     </view>
   </view>
 </template>
@@ -15,45 +113,185 @@
   import wepy from 'wepy'
 
   export default class Index extends wepy.page {
-    config = {
-      navigationBarTitleText: '前端任务'
-    }
-
     compontents = {
 
     }
 
+    onLoad() {
+      const user = wepy.getStorageSync('user')
+      this.user = user || {}
+      if (this.user.name) {
+        wepy.setNavigationBarTitle({
+          title: '计分板'
+        })
+        wepy.setNavigationBarColor({
+          frontColor: '#ffffff',
+          backgroundColor: '#000000',
+          animation: {
+            duration: 500
+          }
+        })
+      }
+      const taskList = wepy.getStorageSync('taskList')
+      this.taskList = taskList || []
+    }
+
+    methods = {
+      chooseUser(user) {
+        if (this.jumpOne && this.jumpOne !== user.name) {
+          wepy.showModal({
+            title: '提示',
+            content: '换人会造成任务列表丢失',
+            success: (res) => {
+              if (res.confirm) {
+                wepy.removeStorageSync('taskList')
+                this.taskList = []
+                this.jumpOne = false
+                this.setUser(user)
+                this.$apply()
+              }
+            }
+          })
+          return
+        }
+        if (this.jumpOne && this.jumpOne === user.name) {
+          this.jumpOne = false
+          return
+        }
+        this.setUser(user)
+      },
+      backToOne() {
+        this.jumpOne = this.user.name
+        wepy.setNavigationBarTitle({
+          title: ''
+        })
+        wepy.setNavigationBarColor({
+          frontColor: '#ffffff',
+          backgroundColor: '#00a388'
+        })
+      },
+      addTask() {
+        this.showPop = true
+      },
+      closePop() {
+        this.showPop = false
+        this.showContent = false
+      },
+      chooseRank(rank) {
+        this.rank = rank + 1
+      },
+      chooseScore(score) {
+        this.score = score + 1
+      },
+      toggleCombo() {
+        this.combo = this.combo === 1 ? 2 : 1
+      },
+      confirm() {
+        this.showPop = false
+        this.submitTask()
+      },
+      bindTaskTitle(e) {
+        this.curTask.title = e.detail.value
+      },
+      bindTaskContent(e) {
+        this.curTask.content = e.detail.value
+      },
+      showTaskContent(task) {
+        this.showPop = true
+        this.showContent = task.content || '这货懒得没写'
+      }
+    }
+
+    setUser(user) {
+      wepy.setStorage({
+        key: 'user',
+        data: user
+      })
+      this.user = user
+      wepy.setNavigationBarTitle({
+        title: '计分板'
+      })
+      wepy.setNavigationBarColor({
+        frontColor: '#ffffff',
+        backgroundColor: '#000000',
+        animation: {
+          duration: 500
+        }
+      })
+    }
+
+    submitTask() {
+      const task = {
+        ...this.curTask,
+        rank: this.rank,
+        score: this.score,
+        combo: this.combo,
+        finalScore: this.finalScore
+      }
+      this.resetCurTask()
+      this.taskList.push(task)
+      wepy.setStorageSync('taskList', this.taskList)
+    }
+
+    resetCurTask() {
+      this.curTask = {}
+      this.rank = 1
+      this.score = 1
+      this.combo = 1
+    }
+
+    computed = {
+      step() {
+        return (!this.user.name || this.jumpOne) ? 1 : 2
+      },
+      finalScore() {
+        return Math.floor(this.base * (this.rank / this.user.rank) * (this.score / 3) * this.combo)
+      }
+    }
+
     data = {
+      navTitle: '',
+      navColor: '#00a388',
       step: 1,
+      user: {},
+      showPop: false,
+      base: 100,
+      combo: 1,
+      rank: 1,
+      score: 1,
+      showContent: false,
+      curTask: {},
+      taskList: [],
+      jumpOne: false,
       userList: [
         {
-          name: '五柳'，
+          name: '大鱼',
           rank: '4'
         },
         {
-          name: '大鱼'，
+          name: '杜松',
+          rank: '1'
+        },
+        {
+          name: '五柳',
           rank: '4'
         },
         {
-          name: '驯鹿'，
+          name: '新雨',
+          rank: '1'
+        },
+        {
+          name: '夕颜',
+          rank: '2'
+        },
+        {
+          name: '驯鹿',
           rank: '3'
         },
         {
-          name: '夕颜'，
+          name: '藏马',
           rank: '2'
-        },
-        {
-          name: '藏马'，
-          rank: '2'
-        },
-        {
-          name: '杜松'，
-          rank: '1'
-        },
-        {
-          name: '新雨'，
-          rank: '1'
-        },
+        }
       ]
     }
   }
