@@ -16,29 +16,31 @@
     <view  wx:if="{{step === 2}}" class="step-two step">
       <view class="main">
         <view class="left">
-          <view class="name-wrap">{{user.name}}</view>
-          <view class="back-one" bindtap="backToOne">返回</view>
+          <view class="name-wrap" bindtap="backToOne">{{user.name}}</view>
+          <view class="back-one" bindtap="showRankList">排行榜</view>
         </view>
         <view class="right">
           <scroll-view class="task-list" scroll-y>
-            <block wx:for="{{taskList}}" wx:for-index="index" wx:for-item="item" wx:key="key">
-              <view class="task-wrap" bindtap="showTaskContent" data-wepy-params-a="{{item}}">
-                <view class="task-title">TASK-{{index+1}}：{{item.title}}</view>
-                <view class="task-content">
-                  <view class="tc-item-wrap">
-                    <view class="tc-item">难度</view>
-                    <view class="tc-item">评级</view>
-                    <view class="tc-item">连击</view>
+            <view class="item-list-wrap">
+              <block wx:for="{{taskList}}" wx:for-index="index" wx:for-item="item" wx:key="key">
+                <view class="task-wrap" bindtap="showTaskContent" data-wepy-params-a="{{item}}">
+                  <view class="task-title">TASK-{{index+1}}：{{item.title}}</view>
+                  <view class="task-content">
+                    <view class="tc-item-wrap">
+                      <view class="tc-item">难度</view>
+                      <view class="tc-item">评级</view>
+                      <view class="tc-item">连击</view>
+                    </view>
+                    <view class="tc-item-wrap">
+                      <view class="tc-item">{{item.rank}}</view>
+                      <view class="tc-item">{{item.score}}</view>
+                      <view class="tc-item">{{item.combo}}</view>
+                    </view>
+                    <view class="tc-final">{{item.finalScore}}</view>
                   </view>
-                  <view class="tc-item-wrap">
-                    <view class="tc-item">{{item.rank}}</view>
-                    <view class="tc-item">{{item.score}}</view>
-                    <view class="tc-item">{{item.combo}}</view>
-                  </view>
-                  <view class="tc-final">{{item.finalScore}}</view>
                 </view>
-              </view>
-            </block>
+              </block>
+            </view>
           </scroll-view>  
           <button class="add-task" hover-class="hover" bindtap="addTask">+</button>
         </view>  

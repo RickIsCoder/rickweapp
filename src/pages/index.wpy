@@ -22,29 +22,31 @@
     <view wx:if="{{step === 2}}" class="step-two step">
       <view class="main">
         <view class="left">
-          <view class="name-wrap">{{user.name}}</view>
-          <view class="back-one" @tap="backToOne">返回</view>
+          <view class="name-wrap" @tap="backToOne">{{user.name}}</view>
+          <view class="back-one" @tap="showRankList">排行榜</view>
         </view>
         <view class="right">
           <scroll-view class="task-list" scroll-y>
-            <repeat for="{{taskList}}" item="item" index="index">
-              <view class="task-wrap" @tap="showTaskContent({{item}})">
-                <view class="task-title">TASK-{{index+1}}：{{item.title}}</view>
-                <view class="task-content">
-                  <view class="tc-item-wrap">
-                    <view class="tc-item">难度</view>
-                    <view class="tc-item">评级</view>
-                    <view class="tc-item">连击</view>
+            <view class="item-list-wrap">
+              <repeat for="{{taskList}}" item="item" index="index">
+                <view class="task-wrap" @tap="showTaskContent({{item}})">
+                  <view class="task-title">TASK-{{index+1}}：{{item.title}}</view>
+                  <view class="task-content">
+                    <view class="tc-item-wrap">
+                      <view class="tc-item">难度</view>
+                      <view class="tc-item">评级</view>
+                      <view class="tc-item">连击</view>
+                    </view>
+                    <view class="tc-item-wrap">
+                      <view class="tc-item">{{item.rank}}</view>
+                      <view class="tc-item">{{item.score}}</view>
+                      <view class="tc-item">{{item.combo}}</view>
+                    </view>
+                    <view class="tc-final">{{item.finalScore}}</view>
                   </view>
-                  <view class="tc-item-wrap">
-                    <view class="tc-item">{{item.rank}}</view>
-                    <view class="tc-item">{{item.score}}</view>
-                    <view class="tc-item">{{item.combo}}</view>
-                  </view>
-                  <view class="tc-final">{{item.finalScore}}</view>
                 </view>
-              </view>
-            </repeat>
+              </repeat>
+            </view>
           </scroll-view>  
           <button class="add-task" hover-class="hover" @tap="addTask">+</button>
         </view>  
@@ -120,18 +122,18 @@
     onLoad() {
       const user = wepy.getStorageSync('user')
       this.user = user || {}
-      if (user.name) {
-        wepy.setNavigationBarTitle({
-          title: '计分板'
-        })
-        wepy.setNavigationBarColor({
-          frontColor: '#ffffff',
-          backgroundColor: '#000000',
-          animation: {
-            duration: 500
-          }
-        })
-      }
+      // if (user.name) {
+      //   wepy.setNavigationBarTitle({
+      //     title: '计分板'
+      //   })
+      //   wepy.setNavigationBarColor({
+      //     frontColor: '#ffffff',
+      //     backgroundColor: '#000000',
+      //     animation: {
+      //       duration: 500
+      //     }
+      //   })
+      // }
       const taskList = wepy.getStorageSync('taskList')
       this.taskList = taskList || []
     }
@@ -159,13 +161,13 @@
       },
       backToOne() {
         this.jumpOne = this.user.name
-        wepy.setNavigationBarTitle({
-          title: ''
-        })
-        wepy.setNavigationBarColor({
-          frontColor: '#ffffff',
-          backgroundColor: '#00a388'
-        })
+        // wepy.setNavigationBarTitle({
+        //   title: ''
+        // })
+        // wepy.setNavigationBarColor({
+        //   frontColor: '#ffffff',
+        //   backgroundColor: '#00a388'
+        // })
       },
       addTask() {
         this.showPop = true
@@ -196,6 +198,9 @@
       showTaskContent(task) {
         this.showPop = true
         this.showContent = task.content || '这货懒得没写'
+      },
+      showRankList() {
+        this.showPop = false
       }
     }
 
@@ -205,16 +210,16 @@
         data: user
       })
       this.user = user
-      wepy.setNavigationBarTitle({
-        title: '计分板'
-      })
-      wepy.setNavigationBarColor({
-        frontColor: '#ffffff',
-        backgroundColor: '#000000',
-        animation: {
-          duration: 500
-        }
-      })
+      // wepy.setNavigationBarTitle({
+      //   title: '计分板'
+      // })
+      // wepy.setNavigationBarColor({
+      //   frontColor: '#ffffff',
+      //   backgroundColor: '#000000',
+      //   animation: {
+      //     duration: 500
+      //   }
+      // })
     }
 
     submitTask() {
