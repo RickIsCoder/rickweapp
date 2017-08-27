@@ -1,1 +1,1 @@
-{"pages":["pages/index"],"window":{"backgroundTextStyle":"light","navigationBarBackgroundColor":"#000000","navigationBarTitleText":"计分板","navigationBarTextStyle":"white"}}
+{"pages":["pages/index","pages/rank","pages/calc"],"window":{"backgroundTextStyle":"light","navigationBarBackgroundColor":"#000000","navigationBarTitleText":"计分板","navigationBarTextStyle":"white"}}
