@@ -1,8 +1,98 @@
+<style lang="less" src="main.less"></style>
 <style lang="less">
-  
+  .rank {
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 60rpx;
+      color: rgb(144,216,215);
+      .center-icon {
+        text-align: center;
+        .award {
+          font-size: 200rpx;
+        }
+      }
+      .wing {
+        font-size: 80rpx;
+      }
+    }
+    .note {
+      position: absolute;
+      top: 30rpx;
+      left: 30rpx;
+      color: #e5ac2e;
+    }
+    .choose-wrap {
+      display: flex;
+      position: absolute;
+      bottom: 30rpx;
+      left: 30rpx;
+      color: #1a1a1a;
+      font-size: 24rpx;
+      .choose-item {
+        padding: 10rpx;
+        margin-right: 20rpx;
+        border: 1rpx solid #1a1a1a;
+        border-radius: 6rpx;
+        &.choosed {
+          background-color: #e5ac2e;
+          color: white;
+          border: none;
+        }
+      }
+    }
+  }
 </style>
 <template>
-  
+  <view class="rank">
+    <view class="header">
+      <view class="icon wing">&#xe667;</view>
+      <view class="icon center-icon">
+        <view class="icon star">&#xe733;</view>
+        <view class="icon award">&#xe6b0;</view>
+      </view>
+      <view class="icon wing">&#xe666;</view>
+    </view>
+    <view class="rank-list">
+      <repeat for="{{curRank}}" item="item" index="index">
+        <view class="rank-item rank{{index}}">
+          <view class="rank-bg">
+            <view class="avatar">{{item.avatar}}</view>
+            <view class="content">
+              <view class="name">{{item.name}}</view>
+              <view class="score">{{item.score}}</view>
+            </view>
+            <view class="iconick-wrap">
+              <view
+                wx:if="{{index === 0}}"
+                class="icon iconick"
+              >&#xe619;</view>
+              <view
+                wx:if="{{index === 1}}"
+                class="icon iconick"
+              >&#xe617;</view>
+              <view
+                wx:if="{{index === 2}}"
+                class="icon iconick"
+              >&#xe60c;</view>
+            </view>
+          </view>
+        </view>
+      </repeat>
+    </view>
+    <view class="note">{{note}}</view>
+    <view class="choose-wrap" wx:if="{{type !== 'all'}}">
+      <repeat for="{{ranks.length}}" index="index">
+        <view
+          @tap="chooseWeek({{index}})"
+          class="choose-item {{index === week ? 'choosed' : ''}}"
+        >
+          第{{index + 1}}周
+        </view>
+      </repeat>
+    </view>
+  </view>
 </template>
 <script>
   import wepy from 'wepy'
@@ -11,6 +101,156 @@
     config = {
       navigationBarTitleText: '排行榜'
     }
-    
+
+    onLoad(o) {
+      if (o.type === 'all') {
+        this.type = 'all'
+      }
+    }
+
+    computed = {
+      curRank() {
+        let rank = this.ranks[this.week]
+        if (this.type === 'all') {
+          rank = this.allRanks
+        }
+        return rank.sort((a, b) => {
+          if (a.score < b.score) {
+            return 1
+          }
+          return -1
+        }).slice(0, 3)
+      },
+      note() {
+        return this.type === 'all' ? '总榜' : `第 ${this.week + 1} 周`
+      }
+    }
+
+    methods = {
+      chooseWeek(index) {
+        if (this.week === index) {
+          return
+        }
+        this.week = index
+      }
+    }
+
+    data = {
+      type: 'week',
+      week: 1,
+      allRanks: [
+        {
+          avatar: '杜',
+          name: '杜松',
+          score: 1400
+        },
+        {
+          avatar: '大',
+          name: '大鱼',
+          score: 166
+        },
+        {
+          avatar: '五',
+          name: '五柳',
+          score: 66
+        },
+        {
+          avatar: '新',
+          name: '新雨',
+          score: 600
+        },
+        {
+          avatar: '夕',
+          name: '夕颜',
+          score: 400
+        },
+        {
+          avatar: '驯',
+          name: '驯鹿',
+          score: 443
+        },
+        {
+          avatar: '藏',
+          name: '藏马',
+          score: 300
+        }
+      ],
+      ranks: [
+        [
+          {
+            avatar: '杜',
+            name: '杜松',
+            score: 800
+          },
+          {
+            avatar: '大',
+            name: '大鱼',
+            score: 100
+          },
+          {
+            avatar: '五',
+            name: '五柳',
+            score: 0
+          },
+          {
+            avatar: '新',
+            name: '新雨',
+            score: 200
+          },
+          {
+            avatar: '夕',
+            name: '夕颜',
+            score: 200
+          },
+          {
+            avatar: '驯',
+            name: '驯鹿',
+            score: 88
+          },
+          {
+            avatar: '藏',
+            name: '藏马',
+            score: 150
+          }
+        ],
+        [
+          {
+            avatar: '杜',
+            name: '杜松',
+            score: 600
+          },
+          {
+            avatar: '大',
+            name: '大鱼',
+            score: 66
+          },
+          {
+            avatar: '五',
+            name: '五柳',
+            score: 66
+          },
+          {
+            avatar: '新',
+            name: '新雨',
+            score: 400
+          },
+          {
+            avatar: '夕',
+            name: '夕颜',
+            score: 200
+          },
+          {
+            avatar: '驯',
+            name: '驯鹿',
+            score: 355
+          },
+          {
+            avatar: '藏',
+            name: '藏马',
+            score: 150
+          }
+        ]
+      ]
+    }
   }
 </script>

@@ -4,13 +4,17 @@ page {
   color: white;
   overflow: hidden;
 
+  view {
+    box-sizing: border-box;
+  }
+
   @font-face {
     font-family: 'iconfont';  /* project id 383589 */
-    src: url('//at.alicdn.com/t/font_383589_wngjjhfs0fvo0f6r.eot');
-    src: url('//at.alicdn.com/t/font_383589_wngjjhfs0fvo0f6r.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_383589_wngjjhfs0fvo0f6r.woff') format('woff'),
-    url('//at.alicdn.com/t/font_383589_wngjjhfs0fvo0f6r.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_383589_wngjjhfs0fvo0f6r.svg#iconfont') format('svg');
+    src: url('//at.alicdn.com/t/font_383589_r6s7dgxsnct5u3di.eot');
+    src: url('//at.alicdn.com/t/font_383589_r6s7dgxsnct5u3di.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_383589_r6s7dgxsnct5u3di.woff') format('woff'),
+    url('//at.alicdn.com/t/font_383589_r6s7dgxsnct5u3di.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_383589_r6s7dgxsnct5u3di.svg#iconfont') format('svg');
   }
 
   .icon {
@@ -38,6 +42,76 @@ page {
       }
       &.calc {
         background-color: rgb(98,187,231);
+      }
+    }
+  }
+  
+  .rank-list {
+    text-align: center;
+    .rank-item {
+      width: 80%;
+      margin-left: 10%;
+      margin-top: 30rpx;
+      border-radius: 100rpx;
+      background: linear-gradient(to right, rgb(242,242,242), #fdfdfd);
+      padding: 20rpx;
+      .rank-bg {
+        display: flex;
+        align-items: center;
+        border-radius: 100rpx;
+        background-color: white;
+        padding: 20rpx;
+        .avatar {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #747474;
+          width: 100rpx;
+          height: 100rpx;
+          background-color: rgb(242,242,242);
+          border-radius: 50%;
+        }
+        .content {
+          flex: 1;
+          color: #747474;
+          font-size: 40rpx;
+          .name {
+            margin-top: 10rpx;
+            margin-bottom: 10rpx;
+          }
+        }
+        .iconick-wrap {
+          border: 20rpx solid rgb(242,242,242);
+          background-color: white;
+          position: relative;
+          width: 100rpx;
+          height: 100rpx;
+          border-radius: 50%;
+          .iconick {
+            position: absolute;
+            font-size: 80rpx;
+            top: -20rpx;
+            right: -10rpx;
+            color: rgb(116,116,116);
+          }
+        }
+      }
+
+      &.rank0 {
+        background: linear-gradient(to right, rgb(145,213,213), rgb(180,225,225));
+        .rank-bg {
+          background-color: rgb(180,225,225);
+          .avatar {
+            color: rgb(116,116,116);
+            background-color: white;
+          }
+          .iconick-wrap {
+            border: 20rpx solid rgb(205,234,234);
+            .iconick {
+              color: rgb(229,172,46);
+            }
+          }
+        }
       }
     }
   }

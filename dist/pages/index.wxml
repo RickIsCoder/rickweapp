@@ -1,12 +1,14 @@
 
   <view class="main">
-    <navigator url="/page/rank" class="main-item rank-week" hover-class="navigator-hover">      <view class="icon"></view>
+    <navigator url="/pages/rank" class="main-item rank-week" hover-class="navigator-hover">      
+      <view class="icon"></view>
       <view class="text">周排名</view>
     </navigator>
-    <navigator url="/page/rank" class="main-item rank-all" hover-class="navigator-hover">      <view class="icon"></view>
+    <navigator url="/pages/rank?type=all" class="main-item rank-all" hover-class="navigator-hover">      
+      <view class="icon"></view>
       <view class="text">总排名</view>
     </navigator>
-    <navigator url="/page/calc" class="main-item calc" hover-class="navigator-hover">
+    <navigator url="/pages/calc" class="main-item calc" hover-class="navigator-hover">
       <view class="icon"></view>
       <view class="text">计算器</view>
     </navigator>

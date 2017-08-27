@@ -1,11 +1,140 @@
 <style lang="less" src="main.less"></style>
-<template></template>
+<style lang="less">
+  .main {
+    overflow: hidden;
+    background-color: rgb(34,41,50);
+    .center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .final-wrap {
+      width: 100%;
+      height: 200rpx;
+      position: relative;
+      background-color: black;
+      color: white;
+      margin-bottom: 30rpx;
+      .title {
+        position: absolute;
+        bottom: 120rpx;
+        right: 20rpx;
+        font-size: 24rpx;
+        color: #777;
+      }
+      .final-score {
+        position: absolute;
+        bottom: 20rpx;
+        right: 20rpx;
+        font-size: 80rpx;
+        color: #ff6138;
+        margin-left: 8rpx;
+      }
+    }
+    .rank-wrap {
+      display: flex;
+      align-items: center;
+      padding: 30rpx;
+      font-size: 56rpx;
+      .title {
+        color: white;
+        font-size: 36rpx;
+      }
+      .vote {
+        color: rgb(49,207,167);
+        margin-left: 30rpx;
+        .vote-item {
+          margin-right: 20rpx;
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="main">
+    <view class="final-wrap">
+      <view class="title">{{base}} * ({{rank}} / {{userRank}}) * ({{score}} / 3) * {{combo}}</view>
+      <view class="final-score">{{finalScore}}</view>
+    </view>
+    <view class="rank-wrap">
+      <view class="title">用户等级:</view>
+      <view class="center vote">
+        <repeat for="{{4}}" item="item">
+          <view class="vote-item" @tap="chooseUserRank({{item}})">
+            <view wx:if="{{item <= userRank-1}}" class="icon choosed">&#xe733;</view>
+            <view wx:else class="icon">&#xe605;</view>
+          </view>
+        </repeat>
+      </view>
+    </view>
+    <view class="rank-wrap">
+      <view class="title">任务难度:</view>
+      <view class="center vote">
+        <repeat for="{{4}}" item="item">
+          <view class="vote-item" @tap="chooseRank({{item}})">
+            <view wx:if="{{item <= rank-1}}" class="icon choosed">&#xe733;</view>
+            <view wx:else class="icon">&#xe605;</view>
+          </view>
+        </repeat>
+      </view>
+    </view>
+    <view class="rank-wrap">
+      <view class="title">任务评分:</view>
+      <view class="center vote">
+        <repeat for="{{5}}" item="item">
+          <view class="vote-item" @tap="chooseScore({{item}})">
+            <view wx:if="{{item <= score-1}}" class="icon choosed">&#xe62b;</view>
+            <view wx:else class="icon">&#xe624;</view>
+          </view>
+        </repeat>
+      </view>
+    </view>
+    <view class="rank-wrap">
+      <view class="title">连击:</view>
+      <view class="center vote">
+        <view class="vote-item" @tap="toggleCombo">
+          <view wx:if="{{combo == 2}}" class="icon choosed">&#xe62b;</view>
+          <view wx:else class="icon">&#xe624;</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
 <script>
   import wepy from 'wepy'
 
   export default class Calc extends wepy.page {
     config = {
       navigationBarTitleText: '计算器'
+    }
+
+    computed = {
+      finalScore() {
+        return Math.floor(this.base * (this.rank / this.userRank) * (this.score / 3) * this.combo)
+      }
+    }
+
+    data = {
+      base: 100,
+      combo: 1,
+      rank: 1,
+      score: 1,
+      userRank: 1
+    }
+
+    methods = {
+      chooseRank(rank) {
+        this.rank = rank + 1
+      },
+      chooseUserRank(rank) {
+        this.userRank = rank + 1
+      },
+      chooseScore(score) {
+        this.score = score + 1
+      },
+      toggleCombo() {
+        this.combo = this.combo === 1 ? 2 : 1
+      }
     }
   }
 </script>

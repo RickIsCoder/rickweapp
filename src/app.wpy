@@ -37,6 +37,7 @@ export default class extends wepy.app {
   }
 
   onLaunch() {
+    // const userInfo = wx.getStorageSync('userInfo')
   }
 
   // sleep (s) {
