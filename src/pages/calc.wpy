@@ -53,15 +53,15 @@
 <template>
   <view class="main">
     <view class="final-wrap">
-      <view class="title">{{base}} * ({{rank}} / {{userRank}}) * ({{grade}} / 3) * {{combo}}</view>
+      <view class="title">{{base}} + ({{prop}} - {{level}}) * 20 {{extra ? '+ 30' : ''}} {{fiveStar ? '+ 30' : ''}}</view>
       <view class="final-score">{{finalScore}}</view>
     </view>
     <view class="rank-wrap">
       <view class="title">用户等级:</view>
       <view class="center vote">
         <repeat for="{{4}}" item="item">
-          <view class="vote-item" @tap="chooseUserRank({{item}})">
-            <view wx:if="{{item <= userRank-1}}" class="icon choosed">&#xe733;</view>
+          <view class="vote-item" @tap="chooseLevel({{item}})">
+            <view wx:if="{{item <= level-1}}" class="icon choosed">&#xe733;</view>
             <view wx:else class="icon">&#xe605;</view>
           </view>
         </repeat>
@@ -71,8 +71,8 @@
       <view class="title">任务难度:</view>
       <view class="center vote">
         <repeat for="{{4}}" item="item">
-          <view class="vote-item" @tap="chooseRank({{item}})">
-            <view wx:if="{{item <= rank-1}}" class="icon choosed">&#xe733;</view>
+          <view class="vote-item" @tap="chooseProp({{item}})">
+            <view wx:if="{{item <= prop - 1}}" class="icon choosed">&#xe733;</view>
             <view wx:else class="icon">&#xe605;</view>
           </view>
         </repeat>
@@ -92,8 +92,8 @@
     <view class="rank-wrap">
       <view class="title">附加分:</view>
       <view class="center vote">
-        <view class="vote-item" @tap="toggleCombo">
-          <view wx:if="{{combo == 2}}" class="icon choosed">&#xe62b;</view>
+        <view class="vote-item" @tap="toggleExtra">
+          <view wx:if="{{extra}}" class="icon choosed">&#xe62b;</view>
           <view wx:else class="icon">&#xe624;</view>
         </view>
       </view>
@@ -110,30 +110,39 @@
 
     computed = {
       finalScore() {
-        return Math.floor(this.base * (this.rank / this.userRank) * (this.grade / 3) * this.combo)
+        return this.calcScore(this.level, this.prop, this.grade, this.extra)
       }
     }
 
+    calcScore(level, prop, grade, withExtra) {
+      const basePoint = 120
+      const extraPoint = withExtra ? 30 : 0
+      this.base = basePoint * grade / (level === 4 ? 4 : 3)
+      const fiveStar = grade === 5 ? 30 : 0
+      const score = this.base + (prop - level) * 20 + extraPoint + fiveStar
+      return score
+    }
+
     data = {
-      base: 100,
-      combo: 1,
-      rank: 1,
+      base: 120,
+      extra: false,
+      prop: 1,
       grade: 1,
-      userRank: 1
+      level: 1
     }
 
     methods = {
-      chooseRank(rank) {
-        this.rank = rank + 1
+      chooseProp(prop) {
+        this.prop = prop + 1
       },
-      chooseUserRank(rank) {
-        this.userRank = rank + 1
+      chooseLevel(level) {
+        this.level = level + 1
       },
       chooseGrade(grade) {
         this.grade = grade + 1
       },
-      toggleCombo() {
-        this.combo = this.combo === 1 ? 2 : 1
+      toggleExtra() {
+        this.extra = !this.extra
       }
     }
   }
