@@ -76,7 +76,7 @@ var _class = function () {
         value: function $init(wepy) {
             var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-            this.$initAPI(wepy, config.promisifyAPI);
+            this.$initAPI(wepy, config.noPromiseAPI);
             this.$wxapp = getApp();
         }
     }, {
@@ -106,7 +106,7 @@ var _class = function () {
         value: function requestfix() {}
     }, {
         key: '$initAPI',
-        value: function $initAPI(wepy, promisifyAPI) {
+        value: function $initAPI(wepy, noPromiseAPI) {
             var self = this;
             var noPromiseMethods = {
                 stopRecord: true,
@@ -119,12 +119,27 @@ var _class = function () {
                 createAnimation: true,
                 createContext: true,
                 createCanvasContext: true,
+                createSelectorQuery: true,
+                createAudioContext: true,
+                createInnerAudioContext: true,
+                createVideoContext: true,
+                createCameraContext: true,
+                createMapContext: true,
+                pageScrollTo: true,
+                onBLEConnectionStateChange: true,
+                onBLECharacteristicValueChange: true,
                 hideKeyboard: true,
                 stopPullDownRefresh: true
             };
-            if (promisifyAPI) {
-                for (var k in promisifyAPI) {
-                    noPromiseMethods[k] = promisifyAPI[k];
+            if (noPromiseAPI) {
+                if (Array.isArray(noPromiseAPI)) {
+                    noPromiseAPI.forEach(function (v) {
+                        return noPromiseMethods[k] = true;
+                    });
+                } else {
+                    for (var _k in noPromiseAPI) {
+                        noPromiseMethods[_k] = noPromiseAPI[_k];
+                    }
                 }
             }
             Object.keys(wx).forEach(function (key) {

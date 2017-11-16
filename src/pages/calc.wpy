@@ -90,7 +90,7 @@
       </view>
     </view>
     <view class="rank-wrap">
-      <view class="title">连击:</view>
+      <view class="title">附加分:</view>
       <view class="center vote">
         <view class="vote-item" @tap="toggleCombo">
           <view wx:if="{{combo == 2}}" class="icon choosed">&#xe62b;</view>
