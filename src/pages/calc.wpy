@@ -132,13 +132,16 @@
     }
 
     methods = {
-      chooseProp(prop) {
+      chooseProp(o) {
+        const prop = o.currentTarget.dataset.wepyParamsA
         this.prop = prop + 1
       },
-      chooseLevel(level) {
+      chooseLevel(o) {
+        const level = o.currentTarget.dataset.wepyParamsA
         this.level = level + 1
       },
-      chooseGrade(grade) {
+      chooseGrade(o) {
+        const grade = o.currentTarget.dataset.wepyParamsA
         this.grade = grade + 1
       },
       toggleExtra() {
