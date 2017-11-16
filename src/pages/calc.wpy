@@ -53,7 +53,7 @@
 <template>
   <view class="main">
     <view class="final-wrap">
-      <view class="title">{{base}} * ({{rank}} / {{userRank}}) * ({{score}} / 3) * {{combo}}</view>
+      <view class="title">{{base}} * ({{rank}} / {{userRank}}) * ({{grade}} / 3) * {{combo}}</view>
       <view class="final-score">{{finalScore}}</view>
     </view>
     <view class="rank-wrap">
@@ -82,8 +82,8 @@
       <view class="title">任务评分:</view>
       <view class="center vote">
         <repeat for="{{5}}" item="item">
-          <view class="vote-item" @tap="chooseScore({{item}})">
-            <view wx:if="{{item <= score-1}}" class="icon choosed">&#xe62b;</view>
+          <view class="vote-item" @tap="chooseGrade({{item}})">
+            <view wx:if="{{item <= grade-1}}" class="icon choosed">&#xe62b;</view>
             <view wx:else class="icon">&#xe624;</view>
           </view>
         </repeat>
@@ -110,7 +110,7 @@
 
     computed = {
       finalScore() {
-        return Math.floor(this.base * (this.rank / this.userRank) * (this.score / 3) * this.combo)
+        return Math.floor(this.base * (this.rank / this.userRank) * (this.grade / 3) * this.combo)
       }
     }
 
@@ -118,7 +118,7 @@
       base: 100,
       combo: 1,
       rank: 1,
-      score: 1,
+      grade: 1,
       userRank: 1
     }
 
@@ -129,8 +129,8 @@
       chooseUserRank(rank) {
         this.userRank = rank + 1
       },
-      chooseScore(score) {
-        this.score = score + 1
+      chooseGrade(grade) {
+        this.grade = grade + 1
       },
       toggleCombo() {
         this.combo = this.combo === 1 ? 2 : 1
