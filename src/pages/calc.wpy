@@ -53,7 +53,7 @@
 <template>
   <view class="main">
     <view class="final-wrap">
-      <view class="title">{{base}} + ({{prop}} - {{level}}) * 20 {{extra ? '+ 30' : ''}} {{fiveStar ? '+ 30' : ''}}</view>
+      <view class="title">{{base}} + ({{prop}} - {{level}}) * 20 + {{extraPoint}} + {{fiveStar}}</view>
       <view class="final-score">{{finalScore}}</view>
     </view>
     <view class="rank-wrap">
@@ -118,8 +118,8 @@
       const basePoint = 120
       const extraPoint = withExtra ? 30 : 0
       this.base = basePoint * grade / (level === 4 ? 4 : 3)
-      const fiveStar = grade === 5 ? 30 : 0
-      const score = this.base + (prop - level) * 20 + extraPoint + fiveStar
+      this.fiveStar = grade === 5 ? 30 : 0
+      const score = this.base + (prop - level) * 20 + extraPoint + this.fiveStar
       return score
     }
 
@@ -128,7 +128,9 @@
       extra: false,
       prop: 1,
       grade: 1,
-      level: 1
+      level: 1,
+      extraPoint: 0,
+      fiveStar: 0
     }
 
     methods = {
