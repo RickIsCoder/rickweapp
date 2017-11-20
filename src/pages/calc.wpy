@@ -116,10 +116,10 @@
 
     calcScore(level, prop, grade, withExtra) {
       const basePoint = 120
-      const extraPoint = withExtra ? 30 : 0
+      this.extraPoint = withExtra ? 60 : 0
       this.base = basePoint * grade / (level === 4 ? 4 : 3)
-      this.fiveStar = grade === 5 ? 30 : 0
-      const score = this.base + (prop - level) * 20 + extraPoint + this.fiveStar
+      this.fiveStar = grade === 5 ? 20 : 0
+      const score = this.base + (prop - level) * 20 + this.extraPoint + this.fiveStar
       return score
     }
 

@@ -127,7 +127,8 @@
     }
 
     methods = {
-      chooseWeek(index) {
+      chooseWeek(o) {
+        const index = o.currentTarget.dataset.wepyParamsA
         if (this.week === index) {
           return
         }
